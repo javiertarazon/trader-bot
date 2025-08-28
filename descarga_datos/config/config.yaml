@@ -1,0 +1,59 @@
+# Configuración del Data Downloader
+active_exchange: "kucoin"
+
+exchanges:
+  bybit:
+    enabled: false
+    api_key: "your_api_key_here"
+    secret: "your_secret_here"
+    timeframe: "1d"
+    start_date: "2024-01-01"
+    end_date: "2024-03-31"
+  okx:
+    enabled: false
+    api_key: "your_api_key_here"
+    secret: "your_secret_here"
+    timeframe: "1d"
+    start_date: "2024-01-01"
+    end_date: "2024-03-31"
+  kraken:
+    enabled: false
+    api_key: "your_api_key_here"
+    secret: "your_secret_here"
+    timeframe: "1d"
+    start_date: "2024-01-01"
+    end_date: "2024-03-31"
+  kucoin:
+    enabled: true
+    api_key: "your_api_key_here"
+    secret: "your_secret_here"
+    timeframe: "4h"
+    start_date: "2024-01-01"
+    end_date: "2024-03-31"
+
+default_symbols:
+  - "BTC/USDT"
+  - "XRP/USDT"
+  - "ADA/USDT"
+  - "SOL/USDT"
+
+data_types:
+  - "ohlcv"
+  - "trades"
+
+max_retries: 3
+retry_delay: 5
+
+log_level: "INFO"
+log_file: "data_downloader.log"
+
+storage:
+  path: "data"
+  csv:
+    enabled: true
+  sqlite:
+    enabled: true
+
+normalization:
+  enabled: true
+  method: "minmax"
