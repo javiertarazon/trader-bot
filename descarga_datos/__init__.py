@@ -1,0 +1,1 @@
+# Este archivo indica que 'descarga_datos' es un paquete Python.

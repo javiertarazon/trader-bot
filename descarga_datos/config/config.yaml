@@ -1,12 +1,12 @@
 # Configuración del Data Downloader
-active_exchange: "kucoin"
+active_exchange: "bybit"
 
 exchanges:
   bybit:
-    enabled: false
+    enabled: true
     api_key: "your_api_key_here"
     secret: "your_secret_here"
-    timeframe: "1d"
+    timeframe: "1h"
     start_date: "2024-01-01"
     end_date: "2024-03-31"
   okx:
@@ -24,7 +24,7 @@ exchanges:
     start_date: "2024-01-01"
     end_date: "2024-03-31"
   kucoin:
-    enabled: true
+    enabled: false
     api_key: "your_api_key_here"
     secret: "your_secret_here"
     timeframe: "4h"
@@ -57,3 +57,32 @@ storage:
 normalization:
   enabled: true
   method: "minmax"
+
+indicators:
+  volatility:
+    enabled: true
+    period: 14
+    method: "standard_deviation"
+  
+  heiken_ashi:
+    enabled: true
+    trend_period: 3
+    size_comparison_threshold: 1.2
+  
+  atr:
+    enabled: true
+    period: 14
+  
+  adx:
+    enabled: true
+    period: 14
+    threshold: 25
+  
+  ema:
+    enabled: true
+    periods: [10, 20, 200]
+  
+  parabolic_sar:
+    enabled: true
+    acceleration: 0.02
+    maximum: 0.2

@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 import logging
-from ..config.config import NormalizationConfig
+from descarga_datos.config.config import NormalizationConfig
 
 logger = logging.getLogger(__name__)
 
@@ -138,70 +138,3 @@ class DataNormalizer:
                 original_data[feature] = original_values.flatten()
         
         return original_data
-
-
-def normalize_ohlcv_data(df: pd.DataFrame, method: str = "minmax") -> pd.DataFrame:
-    """
-    Normalize OHLCV data for machine learning.
-    
-    Args:
-        df (pd.DataFrame): OHLCV data with columns ['open', 'high', 'low', 'close', 'volume']
-        method (str): Scaling method
-        
-    Returns:
-        pd.DataFrame: Normalized data
-    """
-    ohlcv_columns = ['open', 'high', 'low', 'close', 'volume']
-    
-    # Check if all required columns are present
-    missing_columns = [col for col in ohlcv_columns if col not in df.columns]
-    if missing_columns:
-        raise ValueError(f"Missing OHLCV columns: {missing_columns}")
-    
-    config = ScalerConfig(method=method)
-    normalizer = DataNormalizer(config)
-    
-    return normalizer.fit_transform(df, ohlcv_columns)
-
-
-def create_technical_indicators(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Create technical indicators from OHLCV data.
-    
-    Args:
-        df (pd.DataFrame): OHLCV data
-        
-    Returns:
-        pd.DataFrame: Data with technical indicators
-    """
-    data = df.copy()
-    
-    # Simple Moving Averages
-    data['sma_20'] = data['close'].rolling(window=20).mean()
-    data['sma_50'] = data['close'].rolling(window=50).mean()
-    
-    # Exponential Moving Averages
-    data['ema_12'] = data['close'].ewm(span=12).mean()
-    data['ema_26'] = data['close'].ewm(span=26).mean()
-    
-    # MACD
-    data['macd'] = data['ema_12'] - data['ema_26']
-    data['macd_signal'] = data['macd'].ewm(span=9).mean()
-    
-    # RSI
-    delta = data['close'].diff()
-    gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
-    rs = gain / loss
-    data['rsi'] = 100 - (100 / (1 + rs))
-    
-    # Bollinger Bands
-    data['bb_middle'] = data['close'].rolling(window=20).mean()
-    bb_std = data['close'].rolling(window=20).std()
-    data['bb_upper'] = data['bb_middle'] + (bb_std * 2)
-    data['bb_lower'] = data['bb_middle'] - (bb_std * 2)
-    
-    # Volume indicators
-    data['volume_sma_20'] = data['volume'].rolling(window=20).mean()
-    
-    return data

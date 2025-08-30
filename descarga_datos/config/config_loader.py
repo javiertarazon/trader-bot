@@ -4,7 +4,7 @@ Config loader module for loading configuration from YAML files.
 import yaml
 from typing import Dict, Any
 import os
-from .config import Config, StorageConfig, NormalizationConfig
+from .config import Config, StorageConfig, NormalizationConfig, IndicatorConfig
 
 def load_config_from_yaml(file_path: str = None) -> Config:
     """
@@ -30,15 +30,18 @@ def load_config_from_yaml(file_path: str = None) -> Config:
     # Extraer configuraciones anidadas
     storage_config_data = config_data.pop('storage', {})
     normalization_config_data = config_data.pop('normalization', {})
+    indicators_config_data = config_data.pop('indicators', {})
     
     # Crear instancias de las clases de configuración anidadas
     storage_config = StorageConfig(**storage_config_data)
     normalization_config = NormalizationConfig(**normalization_config_data)
+    indicators_config = IndicatorConfig(**indicators_config_data)
     
     # Crear la instancia de Config principal
     return Config(
         storage=storage_config,
         normalization=normalization_config,
+        indicators=indicators_config,
         **config_data
     )
 
@@ -73,6 +76,15 @@ def save_config_to_yaml(config: Config, file_path: str = None):
         'normalization': {
             'enabled': config.normalization.enabled,
             'method': config.normalization.method
+        },
+        'indicators': {
+            'volatility': config.indicators.volatility,
+            'heiken_ashi': config.indicators.heiken_ashi,
+            'atr': config.indicators.atr,
+            'adx': config.indicators.adx,
+            'ema': config.indicators.ema,
+            'parabolic_sar': config.indicators.parabolic_sar,
+            'normalize_output': config.indicators.normalize_output
         }
     }
     
