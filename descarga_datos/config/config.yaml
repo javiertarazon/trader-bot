@@ -7,32 +7,36 @@ exchanges:
     api_key: "your_api_key_here"
     secret: "your_secret_here"
     timeframe: "1h"
-    start_date: "2024-01-01"
-    end_date: "2024-03-31"
+    start_date: "2021-01-01"
+    end_date: "2025-07-31"
   okx:
     enabled: false
     api_key: "your_api_key_here"
     secret: "your_secret_here"
     timeframe: "1d"
-    start_date: "2024-01-01"
-    end_date: "2024-03-31"
+    start_date: "2021-01-01"
+    end_date: "2025-07-31"
   kraken:
     enabled: false
     api_key: "your_api_key_here"
     secret: "your_secret_here"
     timeframe: "1d"
-    start_date: "2024-01-01"
-    end_date: "2024-03-31"
+    start_date: "2021-01-01"
+    end_date: "2025-07-31"
   kucoin:
     enabled: false
     api_key: "your_api_key_here"
     secret: "your_secret_here"
     timeframe: "4h"
-    start_date: "2024-01-01"
-    end_date: "2024-03-31"
+    start_date: "2021-01-01"
+    end_date: "2025-07-31"
 
 default_symbols:
   - "BTC/USDT"
+  - "ETH/USDT"
+  - "DOGE/USDT"
+  - "LINK/USDT"
+  - "BNB/USDT"
   - "XRP/USDT"
   - "ADA/USDT"
   - "SOL/USDT"

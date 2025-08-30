@@ -97,17 +97,24 @@ class TechnicalIndicators:
         try:
             ha_df = pd.DataFrame(index=df.index)
             
-            # Cálculo de Heiken Ashi
-            ha_df['ha_close'] = (df['open'] + df['high'] + df['low'] + df['close']) / 4
-            ha_df['ha_open'] = (df['open'].shift(1) + df['close'].shift(1)) / 2
-            ha_df['ha_open'].iloc[0] = (df['open'].iloc[0] + df['close'].iloc[0]) / 2
+            # Cálculo de Heiken Ashi usando .loc para asignaciones
+            ha_df.loc[:, 'ha_close'] = (df['open'] + df['high'] + df['low'] + df['close']) / 4
             
-            # Recálculo de open para mantener la fórmula correcta
-            for i in range(1, len(ha_df)):
-                ha_df['ha_open'].iloc[i] = (ha_df['ha_open'].iloc[i-1] + ha_df['ha_close'].iloc[i-1]) / 2
+            # Inicializar ha_open
+            ha_opens = pd.Series(index=df.index)
+            ha_opens.iloc[0] = (df['open'].iloc[0] + df['close'].iloc[0]) / 2
             
-            ha_df['ha_high'] = pd.concat([df['high'], ha_df['ha_open'], ha_df['ha_close']], axis=1).max(axis=1)
-            ha_df['ha_low'] = pd.concat([df['low'], ha_df['ha_open'], ha_df['ha_close']], axis=1).min(axis=1)
+            # Calcular ha_open de manera vectorizada para el resto
+            prev_ha_open = pd.Series(index=df.index)
+            prev_ha_open.iloc[1:] = ha_df['ha_close'].iloc[:-1].values
+            ha_opens.iloc[1:] = (ha_opens.shift().iloc[1:] + prev_ha_open.iloc[1:]) / 2
+            
+            # Asignar ha_open usando .loc
+            ha_df.loc[:, 'ha_open'] = ha_opens
+            
+            # Calcular ha_high y ha_low
+            ha_df.loc[:, 'ha_high'] = pd.concat([df['high'], ha_df['ha_open'], ha_df['ha_close']], axis=1).max(axis=1)
+            ha_df.loc[:, 'ha_low'] = pd.concat([df['low'], ha_df['ha_open'], ha_df['ha_close']], axis=1).min(axis=1)
             
             # Cálculo de tendencia basada en la dirección de la vela
             ha_df['ha_trend'] = np.where(ha_df['ha_close'] > ha_df['ha_open'], 1, -1)
@@ -274,7 +281,7 @@ class TechnicalIndicators:
                 sar_series = pd.Series([0.0] * len(df), index=df.index)
             else:
                 # Forward fill para NaN iniciales, luego fillna(0) para cualquier restante
-                sar_series = sar_series.fillna(method='ffill').fillna(0.0)
+                sar_series = sar_series.ffill().fillna(0.0)
             
             return sar_series
             

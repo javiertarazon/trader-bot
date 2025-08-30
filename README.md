@@ -20,8 +20,16 @@ Este proyecto proporciona un sistema completo para descargar datos OHLCV de crip
 
 ## Requisitos
 
-- Python 3.8+
-- Dependencias listadas en `requirements.txt`
+- Python 3.11+
+- Dependencias principales:
+  - ccxt >= 4.0.0 (para conexión con exchanges)
+  - pandas >= 2.0.0 (para procesamiento de datos)
+  - numpy >= 1.24.0 (operaciones numéricas)
+  - SQLAlchemy >= 2.0.0 (almacenamiento en base de datos)
+  - scikit-learn >= 1.3.0 (normalización de datos)
+  - talib-binary >= 0.4.24 (indicadores técnicos)
+  
+Para una lista completa de dependencias, ver `requirements.txt`
 
 ## Instalación
 
@@ -44,6 +52,16 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+## Verificación de Datos
+
+El sistema incluye verificación automática de datos para asegurar la integridad y calidad:
+
+- Verificación de timestamps consecutivos
+- Detección de valores faltantes o nulos
+- Validación de rangos de precios y volúmenes
+- Comprobación de integridad entre CSV y base de datos
+- Validación de cálculos de indicadores técnicos
 
 ## Estructura del Proyecto
 
