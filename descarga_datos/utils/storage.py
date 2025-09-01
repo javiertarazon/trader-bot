@@ -5,6 +5,7 @@ from typing import List, Dict, Any, Union
 import logging
 import pandas as pd
 import json
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
@@ -58,9 +59,14 @@ def save_to_sqlite(data: Union[pd.DataFrame, List[Dict[str, Any]]], table_name: 
     """
     if isinstance(data, pd.DataFrame):
         df = data.copy()
+        
+        # Convertir timestamps a enteros
         for col in df.columns:
-            if df[col].dtype == 'object':
+            if pd.api.types.is_datetime64_any_dtype(df[col]):
+                df[col] = df[col].astype(np.int64) // 10**9
+            elif df[col].dtype == 'object':
                 df[col] = df[col].apply(lambda x: json.dumps(x) if isinstance(x, (dict, list)) else x)
+        
         data = df.to_dict(orient='records')
 
     try:

@@ -2,7 +2,7 @@
 
 Este proyecto proporciona un sistema completo para descargar datos OHLCV de criptomonedas desde exchanges y calcular indicadores técnicos para análisis de mercado y machine learning.
 
-## Características
+## Características v1.2
 
 - **Descarga de datos OHLCV** desde múltiples exchanges (Binance, Bybit, etc.)
 - **Indicadores técnicos calculados**:

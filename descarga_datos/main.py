@@ -125,13 +125,19 @@ async def main():
                 conn.close()
             else:
                 logger.info(f"Descargando nuevos datos para {symbol}")
-                # Descargar datos OHLCV
-                ohlcv_data = await downloader.async_download_ohlcv(
+                # Descargar datos OHLCV con validación
+                ohlcv_data, stats = await downloader.async_download_ohlcv(
                     symbol, 
                     active_exchange, 
                     timeframe=timeframe,
                     limit=1000
                 )
+                
+                if stats:
+                    logger.info(f"Estadísticas de descarga para {symbol}:")
+                    logger.info(f"  - Rango temporal: {stats['time_range']['start']} a {stats['time_range']['end']}")
+                    logger.info(f"  - Filas descargadas: {stats['row_count']}")
+                    logger.info(f"  - Volatilidad de precios: {stats['price_stats']['price_volatility']:.4f}")
                 
                 if ohlcv_data is not None and not ohlcv_data.empty:
                     logger.info(f"Datos descargados: {len(ohlcv_data)} filas")

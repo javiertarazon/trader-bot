@@ -38,6 +38,12 @@ def setup_logging(config: Config) -> None:
     
     # Configurar el logger raíz
     root_logger = logging.getLogger()
+    
+    # Limpiar handlers existentes
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+    
+    # Configurar el nuevo logger
     root_logger.setLevel(log_level)
     root_logger.addHandler(file_handler)
     root_logger.addHandler(console_handler)
